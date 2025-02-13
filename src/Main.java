@@ -1,9 +1,11 @@
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
+        //all words we can use to type
         String[] words = {
                 "apple", "banana", "orange", "grape", "pineapple", "mango", "peach", "pear", "kiwi", "plum",
                 "strawberry", "blueberry", "blackberry", "raspberry", "cherry", "watermelon", "melon", "papaya",
@@ -27,17 +29,21 @@ public class Main {
                 "fungus", "moss", "fern", "grass", "bamboo", "palm", "ivy", "cactus", "succulent", "herb"
         };
 
+        //some initialize
         Random random = new Random();
-
         StringBuilder text = new StringBuilder();
-
-        for(int i = 0;i < 10;i++){
-            int queue = random.nextInt(189);
+        int wordCount = 5;
+        int charCount;
+        //select all words
+        for(int i = 0;i < wordCount;i++){
+            int queue = random.nextInt(words.length);
             text.append(words[queue]).append(" ");
         }
 
-        text.append(words[random.nextInt(189)]);
+        String targetText = text.toString().trim();
 
+        charCount = targetText.length();
+        //countdown and showing text
         System.out.println(3);
         Thread.sleep(1000);
         System.out.println(2);
@@ -45,19 +51,28 @@ public class Main {
         System.out.println(1);
         Thread.sleep(1000);
 
-        System.out.println(text);
+        System.out.println(targetText);
 
-        long startTime = System.currentTimeMillis();
+        //calculating wpm
+        long startTime = LocalTime.now().toNanoOfDay();
 
-        String input = new Scanner(System.in).nextLine();
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        sc.close();
 
-        long finishTime =  System.currentTimeMillis();
+        long finishTime =  LocalTime.now().toNanoOfDay();
 
-        double timeInMilliSeconds =  (finishTime - startTime) / 1000.0;
-        double timeInSeconds =  timeInMilliSeconds / 60;
-        int wpm = (int)(11 /  timeInSeconds);
+        double timeInSeconds =  (finishTime - startTime) / 1_000_000_000.0;
 
-        if(!(Objects.equals(input, text.toString().trim()))){
+        System.out.println("You Spent " + timeInSeconds + " sec");//////
+
+        double wordsYouWrote = (double) charCount / 5.0;
+
+        System.out.println(wordsYouWrote);///////
+
+        int wpm = (int) ( ( wordsYouWrote / timeInSeconds) * 60);
+
+        if(!(Objects.equals(input.strip(), text.toString().strip()))){
             System.out.println("You Must Write All One Truely. You Wrote Wrong");
         }else {
             System.out.println("Your Wpm: " + wpm);
